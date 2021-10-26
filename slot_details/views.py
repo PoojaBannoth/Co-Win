@@ -31,3 +31,8 @@ def pincode_wise(request,pin,date):
     
     return render(request,'',locals())
 
+def state_list(request):
+    url='https://cdn-api.co-vin.in/api/v2/admin/location/states'
+    states = request.get(url,headers=header)
+    states = states.json()
+    return render('find_detail.html',locals())

@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="w3-bar w3-black">
+  <button class="w3-bar-item w3-button" onclick="detail_type('Pincode')">Pincode</button>
+  <button class="w3-bar-item w3-button" onclick="detail_type('District')">District</button>
+</div>
+
+<div id="Pincode" class="w3-container select_type">
+  <div class="overall">
+        <div class="input">
+            <div id="container">
+                <p class="default">Pincode:</p>
+                <div id="pinDiv"><input type="number" id="pin" placeholder="Enter the pincode" class="default"></div>
+                <div id="btnDiv"><button type="submit" onclick="getPinData()" class="default" id="submit">Submit</button></div>  
+            </div>
+        </div>
+        <div id="ans">
+            
+        </div>
+    </div>
+</div>
+
+<div id="State" class="w3-container select_type" style="display:none">
+  
+  <select id="state_id" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+
+
+  <option selected>Select State</option>
+
+  {% for st in states %}
+
+  <option value={% st["state_id"] %}>{% st["state_name"] %}</option>
+
+  {% endfor %}
+ 
+</select>
+</div>
+
+<div id="District" class="w3-container select_type" style="display:none">
+  
+  <select id="dist_id" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+
+  <option selected>Select District</option>
+ 
+</select>
+</div>
+<div id="btnDiv"><button type="submit" onclick="getDistData()" class="default" id="submit">Submit</button></div>  
+
+
+<script src="./pincode.js"></script>
+<script src="./district.js"></script>
+<script>
+function detail_type(detail) {
+  var i;
+  var x = document.getElementsByClassName("select_type");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  document.getElementById(detail).style.display = "block";  
+}
+</script>
+
+<script>
+   $(document).ready(function ()  {
+        $('#state_id').change(function () {
+            $.ajax({
+                url: "https://cdn-api.co-vin.in/api/v2/admin/location/districts/"+$(this).val(),
+                dataType: 'json',
+                success: function(data) {
+                    $("#dist_id").empty();
+                    $("#dist_id").append('<option>Select District</option>');
+                    for(var i = 0; i < data.length; i++){
+                        $("#dist_id").append('<option value="' + data[i]["district_id"] + '">' + data[i]["district_name"] + '</option>');
+                    }
+                }
+            });
+        });
+</script>
+
+
+{% endblock %}

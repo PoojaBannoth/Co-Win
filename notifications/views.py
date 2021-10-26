@@ -1,12 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import requests
 from .models import Notified_list
 import datetime
+from .forms import *
+from django.contrib import messages
+from django.core.mail import send_mail
 
 header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) \
                   AppleWebKit/537.36 (KHTML, like Gecko) \
                   Chrome/56.0.2924.76 Safari/537.36'}
+
+
+def user_subscription(request):
+     if request.method == 'POST':
+        form = Subscribe_User(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, f'Your account has been created! You are now able to log in')
+            return redirect('stats')
+     else:
+        form = Subscribe_User()
+     return render(request, '/form.html', locals())
+
 
 def search_availability():
 
@@ -25,4 +41,9 @@ def search_availability():
                     a.append(every["vaccine"])
                     a.append(every["available_capacity"])
                     day = datetime.datetime.now()
-                    # send mail to pin.email with details
+                    send_mail(
+                            'Vaccine available',
+                            'The vaccine is available at your requested pincode. please come back and book',
+                            'rakshithh176@gmail.com',
+                            [pin.email.to_string],
+                        )
