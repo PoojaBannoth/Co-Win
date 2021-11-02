@@ -17,11 +17,11 @@ def user_subscription(request):
         form = Subscribe_User(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, f'Your account has been created! You are now able to log in')
+            messages.success(request, f'You have now subscribed to notifications, you will be notified when slot is available')
             return redirect('stats')
      else:
         form = Subscribe_User()
-     return render(request, '/form.html', locals())
+     return render(request, 'form.html', locals())
 
 
 def search_availability():

@@ -2,15 +2,98 @@
 
 {% block content %}
 
-<div class='row'>
-<div class="col-6 col-sm-12 margin-b cardblockcls col-lg-4">
-Total Vaccinated
-</div>
-<div class="col-6 col-sm-12 margin-b cardblockcls col-lg-4">
-Sites Conducting Vaccination
-</div>
-<div class="col-lg-4 col-sm-12 cardblockcls col-6 margin-b">
-Total Registrations
-</div>
+<div class='row' style="padding: 50px">
+<div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Total vaccinated</h3>
+       <h5> <p class="card-text">1,06,85,71,879</p></h5>
+        <a href="#" class="btn btn-primary">India marches beyond 1 Billion Vaccine doses</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"></h5>
+        <p class="card-text">.</p>
+        <a href="#" class="btn btn-primary"></a>
+      </div>
+    </div>
+  </div>
 
+</div>
+<h1>Check for statistics of a particular state</h1>
+<div class="form-group">
+  <label class="control-label col-sm-offset-2 col-sm-2" for="company">State</label>
+  <div class="col-sm-6 col-md-4">
+    <select id="state_id" class="form-control">
+  
+  <option selected>Select State</option>
+{% for key, value in z.items %}
+    <option value="{{key}}">{{ value }}</option>
+{% endfor %}
+</select>
+  </div>
+</div>
+ 
+<div id="btnDiv"><button type="submit" onclick="getStateData()" class="default" id="submit">Search</button></div>
+ <div id="ans">
+            
+    </div>
+    <div id="footer">
+       
+    </div>
+</div>
+<script>
+function getStateData(){
+    var pin = document.getElementById("state_id").value; 
+
+    async function api_call(pin){
+       
+
+        req_url = "https://data.covid19india.org/v4/min/data.min.json";
+
+        const res = await fetch(req_url);
+        var data = await res.json();
+
+        let pr;
+        pr="";
+        let temp;
+        let out =``;
+        let sessionDetails =``;
+        {
+            {
+                temp = data[pin];
+                {
+                    out += ` <div class="card">
+                                <div class="general">
+                                    <h6>Total First Dose Vaccinated:</h6>
+                                    <p class="name">${temp.total.vaccinated1}</p>
+                                    <h6>Total Second Dose Vaccinated:</h6>
+                                    <p class="name">${temp.total.vaccinated2}</p>
+                                    <p>Recovered: ${temp.total.recovered}</p>
+                                    <h6>Total Tested:</h6>
+                                    <p>${temp.total.tested}</p>
+                                    <h6>Confirmed cases:</h6>
+                                    <p>${temp.delta.confirmed}</p>
+                                    </div>
+                                    </div>
+                            </div>`;
+    
+                    pr = out;
+                }
+            }
+            document.getElementById("footer").style.display="none";
+        }
+    
+        document.getElementById("ans").innerHTML = pr;
+    }
+    api_call(pin);
+
+
+}
+
+</script>
 {% endblock %}
+

@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from slot_details import views as slot_view
+from stats import views as stat
+from notifications import views as subscribe
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('stats', include('stats.urls')),
+    path('', stat.statewise, name='stats'),
+    path('slots/', slot_view.state_list, name='dist_details'),
+    path('subscribe/', subscribe.user_subscription, name='subscription')
 ]
